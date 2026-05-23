@@ -74,3 +74,166 @@
 .heading {
   margin-left: 20px;font-weight: bold;font-size: 25px;color: hwb(132 15% 5%);
 }
+.cards {
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #1e293b;
+  color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+}
+.balance {
+  border-left: 5px solid #3b82f6;
+}
+.hidden {
+  display: none;
+}
+.income {
+  border-left: 5px solid #22c55e;
+}
+
+.expense {
+  border-left: 5px solid #ef4444;
+}
+.form-section {
+  margin-top: 30px;
+  background-color: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.form-section h2 {
+  margin-bottom: 15px;
+}
+
+#transactionForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+#transactionForm input,
+#transactionForm select {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+#transactionForm button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#transactionForm button:hover {
+  background-color: #2563eb;
+}
+.txn-item {
+  background-color: #1e293b;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.txn-item button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.txn-item button:hover {
+  background-color: darkred;
+}
+#budgetSection{
+  margin-top: 30px;
+  background-color: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#budgetSection input{
+  border-radius: 5px;
+  padding: 15px;
+  border: none;
+  background-color: #2d3a55;
+  color: white;
+}
+
+ #budgetSection input:focus {
+  outline: 2px solid #3b82f6; }
+.budget-form ,.goal-form{
+  display: flex;
+  gap: 15px; 
+  margin: 20px;
+  height: 30px; 
+}
+#addBudgetBtn ,#addGoalBtn {
+  background-color:#3b82f6;;
+  color: white;
+  padding: 6px ;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+
+}
+.budget-item {
+  background: #1e293b;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+ 
+.goal-item {
+  background: #1e293b;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+.section {
+  width: 100%;
+}
+.hidden {
+  display: none;
+}
+.hidden {
+  display: none !important;
+}
+.section {
+  transition: 0.3s;
+}

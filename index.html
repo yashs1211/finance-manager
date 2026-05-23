@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PFEM</title>
+    <link rel="icon" type="image/x-icon" href="/assets/icon-1main.png">
     <link rel="stylesheet" href="index.css"/>
    <script src="index.js" defer></script>
   </head>
@@ -23,18 +24,94 @@
     <aside class="sidebar">
       
       <div class="nav">
-         <div class="nav-item active">Dashboard</div>
-    <div class="nav-item">Transactions</div>
-    <div class="nav-item">Budgets & Goals</div>
-    <div class="nav-item">Analytics</div>
-    <div class="nav-item">Settings / Data</div>
-
+<div class="nav-item active" data-target="dashboardSection">Dashboard</div>
+<div class="nav-item " data-target="transactionSection">Transactions</div>
+<div class="nav-item" data-target="budgetSection">Budgets & Goals</div>
+<div class="nav-item" data-target="analyticsSection">Analytics</div>
+<div class="nav-item" data-target="settingsSection">Settings / Data</div>
       </div>
        <div class="bottom-btn">
     + Add Txn
   </div>
     </aside>
      <main class="main-content">
+      <!-- dashboard -->
+     <div id="dashboardSection" class="section">
+               <div class="cards">
+    <div class="card balance">
+      <h3>Total Balance</h3>
+      <p id="balance">₹ 0</p>
+    </div>
+    <div class="card income">
+      <h3>Income</h3>
+     <p id="income">₹ 0</p>
+    </div>
+    <div class="card expense">
+      <h3>Expense</h3>
+      <p id="expense">₹ 0</p>
+    </div>
+        </div>
+       </div>
+     <!-- trasaction -->
+     <div id="transactionSection" class="section hidden">
+       <div class="form-section">
+        <h2>Add Transaction</h2>
+  <form id="transactionForm">
+    <input type="number" placeholder="Amount" id="amount" required />
+    <select id="category">
+      <option value="Salary">Salary</option>
+      <option value="Food">Food</option>
+      <option value="Transportation">Transportation</option>
+      <option value="Entertainment">Entertainment</option>
+      <option value="Hospital">Hospital</option>
+      <option value="Other's" >Others's</option>
+    </select>
+    <select id="type">
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+
+    <input type="date" id="date" required />
+
+    <button type="submit">Add Transaction</button>
+
+  </form>
+       </div>
+       <div id="transactionList"></div>
+     </div>
+    <div id="budgetSection" class="section hidden">
+
+  <h2>Budgets & Goals</h2>
+
+  <!-- Add Budget -->
+  <div class="budget-form">
+    <input type="text" placeholder="Category (Food, Travel)" id="budgetCategory">
+    <input type="number" placeholder="Budget Amount" id="budgetAmount">
+    <button id="addBudgetBtn">Add Budget</button>
+  </div>
+
+  <!-- Budget List -->
+  <div id="budgetList"></div>
+
+  <!-- Add Goal -->
+  <div class="goal-form">
+    <input type="text" placeholder="Goal Name (Bike, Laptop)" id="goalName">
+    <input type="number" placeholder="Target Amount" id="goalAmount">
+    <button id="addGoalBtn">Add Goal</button>
+  </div>
+
+  <!-- Goal List -->
+  <div id="goalList"></div>
+
+</div>
+<!-- ANALYTICS -->
+  <div id="analyticsSection" class="section hidden">
+    <h2>Analytics</h2>
+  </div>
+   <!-- SETTINGS --> 
+    <div id="settingsSection" class="section hidden">
+      <h2>Settings / Data</h2>
+    </div>
     </main>
       </div>
   </body>
