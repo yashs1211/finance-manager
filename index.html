@@ -6,6 +6,7 @@
     <title>PFEM</title>
     <link rel="icon" type="image/x-icon" href="/assets/icon-1main.png">
     <link rel="stylesheet" href="index.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
    <script src="index.js" defer></script>
   </head>
   <body style="background-color: hsl(240, 43%, 18%)">
@@ -64,7 +65,7 @@
       <option value="Transportation">Transportation</option>
       <option value="Entertainment">Entertainment</option>
       <option value="Hospital">Hospital</option>
-      <option value="Other's" >Others's</option>
+      <option value="Others" >Others</option>
     </select>
     <select id="type">
       <option value="income">Income</option>
@@ -83,17 +84,19 @@
 
   <h2>Budgets & Goals</h2>
 
-  <!-- Add Budget -->
+  
   <div class="budget-form">
-    <input type="text" placeholder="Category (Food, Travel)" id="budgetCategory">
+   <select id="budgetCategory">
+  <option value="food">Food</option>
+  <option value="transportation">Transportation</option>
+  <option value="entertainment">Entertainment</option>
+  <option value="hospital">Hospital</option>
+  <option value="others">Others</option>
+</select>
     <input type="number" placeholder="Budget Amount" id="budgetAmount">
     <button id="addBudgetBtn">Add Budget</button>
   </div>
-
-  <!-- Budget List -->
   <div id="budgetList"></div>
-
-  <!-- Add Goal -->
   <div class="goal-form">
     <input type="text" placeholder="Goal Name (Bike, Laptop)" id="goalName">
     <input type="number" placeholder="Target Amount" id="goalAmount">
@@ -105,13 +108,51 @@
 
 </div>
 <!-- ANALYTICS -->
-  <div id="analyticsSection" class="section hidden">
-    <h2>Analytics</h2>
+    <div id="analyticsSection" class="section hidden">
+
+  <h2 style="color: hwb(132 15% 5%);">Financial Health Trend</h2>
+
+  <div class="chart-container">
+    <canvas id="financialChart"></canvas>
   </div>
+
+  <h2 style="margin-top:40px; color: hwb(132 15% 5%);">
+    Budget vs Actual Spending
+  </h2>
+
+  <div class="chart-container">
+    <canvas id="budgetChart"></canvas>
+  </div>
+
+</div>
    <!-- SETTINGS --> 
-    <div id="settingsSection" class="section hidden">
-      <h2>Settings / Data</h2>
-    </div>
+  <div id="settingsSection" class="section hidden">
+
+  <h2>Settings / Data</h2>
+
+  <div class="settings-card">
+
+    <h3>Data Management</h3>
+
+    <button id="exportBtn">
+      Export Data
+    </button>
+
+    <input 
+      type="file"
+      id="importFile"
+      accept=".json"
+    >
+
+    <button id="clearDataBtn" style="background-color: #ef4444;">
+      Clear All Data
+    </button>
+
+    <div id="dataSummary"></div>
+
+  </div>
+
+</div>
     </main>
       </div>
   </body>
