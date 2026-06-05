@@ -25,6 +25,7 @@
     <aside class="sidebar">
       
       <div class="nav">
+
 <div class="nav-item active" data-target="dashboardSection">Dashboard</div>
 <div class="nav-item " data-target="transactionSection">Transactions</div>
 <div class="nav-item" data-target="budgetSection">Budgets & Goals</div>
@@ -57,6 +58,18 @@
      <div id="transactionSection" class="section hidden">
        <div class="form-section">
         <h2>Add Transaction</h2>
+        <div class="search-box">
+  <input
+    type="text"
+    id="searchTransaction"
+    placeholder="Search by category..."
+  />
+  <select id="filterType">
+  <option value="all">All</option>
+  <option value="income">Income</option>
+  <option value="expense">Expense</option>
+</select>
+</div>
   <form id="transactionForm">
     <input type="number" placeholder="Amount" id="amount" required />
     <select id="category">
@@ -97,6 +110,7 @@
     <button id="addBudgetBtn">Add Budget</button>
   </div>
   <div id="budgetList"></div>
+  <h2> Add Goal 🎯</h2>
   <div class="goal-form">
     <input type="text" placeholder="Goal Name (Bike, Laptop)" id="goalName">
     <input type="number" placeholder="Target Amount" id="goalAmount">
@@ -110,14 +124,14 @@
 <!-- ANALYTICS -->
     <div id="analyticsSection" class="section hidden">
 
-  <h2 style="color: hwb(132 15% 5%);">Financial Health Trend</h2>
+  <h2 style="color: hwb(132 15% 5%);">Financial Health Trend 📈</h2>
 
   <div class="chart-container">
     <canvas id="financialChart"></canvas>
   </div>
 
   <h2 style="margin-top:40px; color: hwb(132 15% 5%);">
-    Budget vs Actual Spending
+    Budget vs Actual Spending 📊
   </h2>
 
   <div class="chart-container">

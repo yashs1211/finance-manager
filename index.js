@@ -81,16 +81,49 @@ navItems.forEach(item => {
   });
 });
 function renderTransactions() {
+
   transactionList.innerHTML = "";
-  transactions.forEach((txn,index) => {
+
+  const searchTerm =
+    document.getElementById("searchTransaction")
+    .value
+    .toLowerCase();
+
+  const filterType =
+    document.getElementById("filterType")
+    .value;
+
+  const filteredTransactions =
+    transactions.filter(txn => {
+
+      const matchesSearch =
+        txn.category
+          .toLowerCase()
+          .includes(searchTerm);
+
+      const matchesType =
+        filterType === "all" ||
+        txn.type === filterType;
+
+      return matchesSearch && matchesType;
+    });
+
+  filteredTransactions.forEach(txn => {
+
     const div = document.createElement("div");
+
     div.classList.add("txn-item");
+
     div.innerHTML = `
       <p>${txn.category} - ₹${txn.amount}</p>
       <span>${txn.type}</span>
       <span>${txn.date}</span>
-     <button onclick="deleteTransaction(${index})">❌</button>
+
+      <button onclick="deleteTransaction(${transactions.indexOf(txn)})">
+        ❌
+      </button>
     `;
+
     transactionList.appendChild(div);
   });
 }
@@ -596,6 +629,14 @@ document
 document
 .getElementById("exportBtn")
 .addEventListener("click", exportData);
+
+document
+.getElementById("searchTransaction")
+.addEventListener("input", renderTransactions);
+
+document
+.getElementById("filterType")
+.addEventListener("change", renderTransactions);
 
 renderTransactions();
 updateSummary();
