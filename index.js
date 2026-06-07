@@ -58,12 +58,14 @@ form.addEventListener("submit", (e) => {
 transactions.push(transaction);
 saveData();
 renderTransactions();
+renderRecentTransactions();
 updateSummary();
 renderBudgets();
 renderGoals();
 renderFinancialChart();
 renderBudgetChart();
 updateDataSummary();
+updateFinancialInsights();
 form.reset();
 });
 
@@ -115,9 +117,11 @@ function renderTransactions() {
     div.classList.add("txn-item");
 
     div.innerHTML = `
-      <p>${txn.category} - ₹${txn.amount}</p>
-      <span>${txn.type}</span>
-      <span>${txn.date}</span>
+      <p>
+${txn.category.charAt(0).toUpperCase() +
+txn.category.slice(1)}
+- ₹${txn.amount}
+</p>
 
       <button onclick="deleteTransaction(${transactions.indexOf(txn)})">
         ❌
@@ -131,12 +135,14 @@ function deleteTransaction(index) {
   transactions.splice(index, 1);
   saveData();
   renderTransactions();
+  renderRecentTransactions();
   updateSummary();
   renderBudgets();
   renderGoals();
   renderFinancialChart();
   updateDataSummary();
   renderBudgetChart();
+  updateFinancialInsights();
 }
 // calucation function
 function updateSummary() {
@@ -613,10 +619,11 @@ function clearAllData() {
   localStorage.removeItem("goals");
 
   renderTransactions();
+  renderRecentTransactions();
   renderBudgets();
   renderGoals();
   updateSummary();
-
+updateFinancialInsights();
   renderFinancialChart();
   renderBudgetChart();
 
@@ -638,7 +645,12 @@ document
 .getElementById("filterType")
 .addEventListener("change", renderTransactions);
 
+document
+.getElementById("importFile")
+.addEventListener("change", importData);
+
 renderTransactions();
+renderRecentTransactions();
 updateSummary();
 renderBudgets();
 renderGoals();
@@ -671,3 +683,215 @@ function exportData() {
 
   URL.revokeObjectURL(url);
 }
+function updateTopCategory() {
+
+  const categoryTotals = {};
+
+  transactions.forEach(txn => {
+
+    if (txn.type === "expense") {
+
+      categoryTotals[txn.category] =
+      (categoryTotals[txn.category] || 0)
+      + txn.amount;
+    }
+  });
+
+  let topCategory = "No Data";
+  let maxSpent = 0;
+
+  Object.entries(categoryTotals).forEach(
+    ([category, amount]) => {
+
+      if (amount > maxSpent) {
+
+        maxSpent = amount;
+
+       topCategory =
+`${category.charAt(0).toUpperCase() +
+category.slice(1)} - ₹${amount}`;
+      }
+    }
+  );
+
+  document.getElementById("topCategory")
+  .textContent = topCategory;
+}
+function renderRecentTransactions() {
+
+  const recentContainer =
+  document.getElementById("recentTransactions");
+
+  recentContainer.innerHTML = "";
+
+  const recent =
+  [...transactions].slice(-5).reverse();
+
+  recent.forEach(txn => {
+const div = document.createElement("div");
+
+div.classList.add("recent-item");
+
+div.innerHTML = `
+  <span>
+    ${txn.category.charAt(0).toUpperCase() +
+      txn.category.slice(1)}
+  </span>
+
+  <span>
+    ₹${txn.amount}
+  </span>
+`;
+  recentContainer.appendChild(div);
+  });
+}
+function importData(event) {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+
+    const data =
+      JSON.parse(e.target.result);
+
+    transactions =
+      data.transactions || [];
+
+    budgets =
+      data.budgets || [];
+
+    goals =
+      data.goals || [];
+
+    saveData();
+
+    renderTransactions();
+    renderRecentTransactions();
+    updateSummary();
+    updateTopCategory();
+    renderBudgets();
+    renderGoals();
+    renderFinancialChart();
+    renderBudgetChart();
+    updateDataSummary();
+
+    alert("Data Imported Successfully");
+  };
+
+  reader.readAsText(file);
+}
+function updateFinancialInsights() {
+
+  const insights =
+  document.getElementById("financialInsights");
+
+  let income = 0;
+  let expense = 0;
+
+  const categoryTotals = {};
+
+  transactions.forEach(txn => {
+
+    if (txn.type === "income") {
+
+      income += txn.amount;
+
+    } else {
+
+      expense += txn.amount;
+
+      categoryTotals[txn.category] =
+      (categoryTotals[txn.category] || 0)
+      + txn.amount;
+    }
+
+  });
+
+  let topCategory = "No Data";
+  let maxAmount = 0;
+
+  Object.entries(categoryTotals).forEach(
+    ([category, amount]) => {
+
+      if (amount > maxAmount) {
+
+        maxAmount = amount;
+        topCategory = category;
+      }
+    }
+  );
+
+  if (topCategory !== "No Data") {
+
+    topCategory =
+      topCategory.charAt(0).toUpperCase() +
+      topCategory.slice(1);
+
+  }
+
+  const savings = income - expense;
+
+  const savingsRate =
+    income > 0
+      ? ((savings / income) * 100).toFixed(1)
+      : 0;
+
+  insights.innerHTML = `
+    <p>🏆 Highest Expense Category: ${topCategory}</p>
+
+    <p>💸 Total Expenses: ₹${expense}</p>
+
+    <p>💰 Savings: ₹${savings}</p>
+
+    <p>📊 Savings Rate: ${savingsRate}%</p>
+  `;
+}
+const themeToggle = document.getElementById("themeToggle");
+if(localStorage.getItem("theme") === "light"){
+    document.body.classList.add("light-mode");
+    themeToggle.textContent = "☀️";
+}
+themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("light-mode");
+
+    if(document.body.classList.contains("light-mode")){
+        themeToggle.textContent = "☀️";
+        localStorage.setItem("theme","light");
+    }
+    else{
+        themeToggle.textContent = "🌙";
+        localStorage.setItem("theme","dark");
+    }
+
+});
+const launchAIBtn = document.getElementById("launchAIBtn");
+
+if (launchAIBtn) {
+  launchAIBtn.addEventListener("click", () => {
+
+    alert(
+      "🤖 AI Analytics is currently under development and will be available in a future release."
+    );
+
+  });
+}
+const accountBtn = document.getElementById("accountBtn");
+
+accountBtn.addEventListener("click", () => {
+
+    alert(
+        "👤 Account Management is currently under development and will be available in a future release."
+    );
+
+});
+renderTransactions();
+renderRecentTransactions();
+updateSummary();
+updateTopCategory();
+renderBudgets();
+updateFinancialInsights();

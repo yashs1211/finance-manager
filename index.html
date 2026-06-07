@@ -13,13 +13,18 @@
     
     <div class="header">
       <div class="heading">
-        CookieFinance
+       FinTrack Pro
       </div>
       <div
         class="menu"
-        style="margin-right: 30px;font-weight: bold;font-size: 20px;color: hwb(132 15% 5%); cursor: pointer;">
+        style="margin-right: 30px; font-weight: bold;font-size: 20px;color: hwb(132 15% 5%); cursor: pointer;">
         Menu
+       
       </div>
+       <button id="themeToggle" class="theme-toggle" style="margin-left: 20px; font-size: 18px; background-color: transparent; border: none; color: hwb(132 15% 5%); cursor: pointer;">
+    🌙
+</button>
+      
     </div>
       <div class="container">
     <aside class="sidebar">
@@ -31,28 +36,51 @@
 <div class="nav-item" data-target="budgetSection">Budgets & Goals</div>
 <div class="nav-item" data-target="analyticsSection">Analytics</div>
 <div class="nav-item" data-target="settingsSection">Settings / Data</div>
+<div class="nav-item" data-target="aiAnalyticsSection">  AI Analytics </div>
+<div class="nav-item" id="accountBtn"> Account</div>
       </div>
-       <div class="bottom-btn">
-    + Add Txn
-  </div>
+      <footer class="footer">
+  <h3>FinTrack Pro</h3>
+  <p>
+    Personal Finance & Expense Management System
+  </p>
+  <p class="copyright">
+    © 2026 FinTrack Pro. All Rights Reserved.
+    yashwanthroyals1@gmail.com
+  </p>
+</footer>
     </aside>
      <main class="main-content">
       <!-- dashboard -->
      <div id="dashboardSection" class="section">
                <div class="cards">
     <div class="card balance">
-      <h3>Total Balance</h3>
+      <h3> 💰Total Balance</h3>
       <p id="balance">₹ 0</p>
     </div>
     <div class="card income">
-      <h3>Income</h3>
+      <h3>📈Income</h3>
      <p id="income">₹ 0</p>
     </div>
     <div class="card expense">
-      <h3>Expense</h3>
+      <h3>📉Expense</h3>
       <p id="expense">₹ 0</p>
     </div>
         </div>
+                   <div class="card top-spending" style="margin-top: 10%;">
+  <h3>Top Spending Category</h3>
+  <p id="topCategory">No Data</p>
+</div>
+<div class="recent-transactions-card">
+  <h3>Recent Transactions</h3>
+  <div id="recentTransactions"></div>
+</div>
+ <div class="insights-card">
+  <h3>Monthly Financial Insights</h3>
+  <div id="financialInsights">
+    No Data Available
+  </div>
+</div>
        </div>
      <!-- trasaction -->
      <div id="transactionSection" class="section hidden">
@@ -141,31 +169,61 @@
 </div>
    <!-- SETTINGS --> 
   <div id="settingsSection" class="section hidden">
-
   <h2>Settings / Data</h2>
-
   <div class="settings-card">
-
     <h3>Data Management</h3>
-
     <button id="exportBtn">
       Export Data
     </button>
-
     <input 
       type="file"
       id="importFile"
       accept=".json"
     >
-
     <button id="clearDataBtn" style="background-color: #ef4444;">
       Clear All Data
     </button>
-
     <div id="dataSummary"></div>
-
   </div>
 
+
+</div>
+  <div id="aiAnalyticsSection" class="section hidden">
+
+    <div class="insights-card">
+
+        <h2>
+            🤖 AI Financial Analytics
+            <span style="color:#f59e0b;">(Coming Soon)</span>
+        </h2>
+
+        <p>
+            Advanced AI-powered spending analysis,
+            smart savings recommendations,
+            budget forecasting,
+            financial risk detection,
+            and personalized insights
+            will be available in future updates.
+        </p>
+
+        <br>
+
+        <ul style="line-height:2;">
+            <li>📊 Spending Pattern Analysis</li>
+            <li>💰 Savings Recommendations</li>
+            <li>📈 Expense Forecasting</li>
+            <li>🎯 Goal Achievement Prediction</li>
+            <li>⚠️ Overspending Alerts</li>
+            <li>🏆 Financial Health Score</li>
+        </ul>
+
+        <br>
+
+        <button id="launchAIBtn" class="bottom-btn">
+            Launch AI Analytics
+        </button>
+
+    </div>
 </div>
     </main>
       </div>
