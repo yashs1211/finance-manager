@@ -1,9 +1,9 @@
-const menu = document.querySelector('.menu');
-const sidebar = document.querySelector('.sidebar');
-const items = document.querySelectorAll('.nav-item');
+const menu = document.querySelector(".menu");
+const sidebar = document.querySelector(".sidebar");
+const items = document.querySelectorAll(".nav-item");
 const form = document.getElementById("transactionForm");
-const navItems = document.querySelectorAll('.nav-item');
-const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll(".nav-item");
+const sections = document.querySelectorAll(".section");
 const transactionList = document.getElementById("transactionList");
 const balanceEl = document.getElementById("balance");
 const incomeEl = document.getElementById("income");
@@ -22,20 +22,19 @@ function saveData() {
   localStorage.setItem("budgets", JSON.stringify(budgets));
   localStorage.setItem("goals", JSON.stringify(goals));
 }
-menu.addEventListener('click', () => {
-
-  sidebar.classList.toggle('hide');
- const style = getComputedStyle(sidebar);
-  if (style.width === '250px') {
-    menu.textContent = 'Menu';
+menu.addEventListener("click", () => {
+  sidebar.classList.toggle("hide");
+  const style = getComputedStyle(sidebar);
+  if (style.width === "250px") {
+    menu.textContent = "Menu";
   } else {
-    menu.textContent = 'Close';
+    menu.textContent = "Close";
   }
 });
-items.forEach(item => {
-  item.addEventListener('click', () => {
-    items.forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
+items.forEach((item) => {
+  item.addEventListener("click", () => {
+    items.forEach((i) => i.classList.remove("active"));
+    item.classList.add("active");
   });
 });
 form.addEventListener("submit", (e) => {
@@ -43,9 +42,9 @@ form.addEventListener("submit", (e) => {
 
   const amount = document.getElementById("amount").value;
   if (!amount || amount <= 0) {
-  alert("Enter valid amount");
-  return;
-}
+    alert("Enter valid amount");
+    return;
+  }
   const category = document.getElementById("category").value;
   const type = document.getElementById("type").value;
   const date = document.getElementById("date").value;
@@ -53,73 +52,60 @@ form.addEventListener("submit", (e) => {
     amount: Number(amount),
     category: category.toLowerCase(),
     type: type,
-    date: date
+    date: date,
   };
-transactions.push(transaction);
-saveData();
-renderTransactions();
-renderRecentTransactions();
-updateSummary();
-renderBudgets();
-renderGoals();
-renderFinancialChart();
-renderBudgetChart();
-updateDataSummary();
-updateFinancialInsights();
-form.reset();
+  transactions.push(transaction);
+  saveData();
+  renderTransactions();
+  renderRecentTransactions();
+  updateSummary();
+  renderBudgets();
+  renderGoals();
+  renderFinancialChart();
+  renderBudgetChart();
+  updateDataSummary();
+  updateFinancialInsights();
+  updateNotifications();
+  form.reset();
 });
 
-
-navItems.forEach(item => {
-  item.addEventListener('click', () => {
+navItems.forEach((item) => {
+  item.addEventListener("click", () => {
     // remove active from all
-    navItems.forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
+    navItems.forEach((i) => i.classList.remove("active"));
+    item.classList.add("active");
     // hide all sections
-    sections.forEach(section => section.classList.add('hidden'));
+    sections.forEach((section) => section.classList.add("hidden"));
     // show selected section
-    const target = item.getAttribute('data-target');
-    document.getElementById(target).classList.remove('hidden');
+    const target = item.getAttribute("data-target");
+    document.getElementById(target).classList.remove("hidden");
   });
 });
 function renderTransactions() {
-
   transactionList.innerHTML = "";
 
-  const searchTerm =
-    document.getElementById("searchTransaction")
-    .value
-    .toLowerCase();
+  const searchTerm = document
+    .getElementById("searchTransaction")
+    .value.toLowerCase();
 
-  const filterType =
-    document.getElementById("filterType")
-    .value;
+  const filterType = document.getElementById("filterType").value;
 
-  const filteredTransactions =
-    transactions.filter(txn => {
+  const filteredTransactions = transactions.filter((txn) => {
+    const matchesSearch = txn.category.toLowerCase().includes(searchTerm);
 
-      const matchesSearch =
-        txn.category
-          .toLowerCase()
-          .includes(searchTerm);
+    const matchesType = filterType === "all" || txn.type === filterType;
 
-      const matchesType =
-        filterType === "all" ||
-        txn.type === filterType;
+    return matchesSearch && matchesType;
+  });
 
-      return matchesSearch && matchesType;
-    });
-
-  filteredTransactions.forEach(txn => {
-
+  filteredTransactions.forEach((txn) => {
     const div = document.createElement("div");
 
     div.classList.add("txn-item");
 
     div.innerHTML = `
       <p>
-${txn.category.charAt(0).toUpperCase() +
-txn.category.slice(1)}
+${txn.category.charAt(0).toUpperCase() + txn.category.slice(1)}
 - ₹${txn.amount}
 </p>
 
@@ -143,13 +129,14 @@ function deleteTransaction(index) {
   updateDataSummary();
   renderBudgetChart();
   updateFinancialInsights();
+  updateNotifications();
 }
 // calucation function
 function updateSummary() {
   let income = 0;
   let expense = 0;
 
-  transactions.forEach(txn => {
+  transactions.forEach((txn) => {
     if (txn.type === "income") {
       income += txn.amount;
     } else {
@@ -157,47 +144,47 @@ function updateSummary() {
     }
   });
   const balance = income - expense;
- balanceEl.textContent = "₹ " + balance;
- incomeEl.textContent = "₹ " + income;
- expenseEl.textContent = "₹ " + expense;
- renderGoals();
+  balanceEl.textContent = "₹ " + balance;
+  incomeEl.textContent = "₹ " + income;
+  expenseEl.textContent = "₹ " + expense;
+  renderGoals();
 }
 addBudgetBtn.addEventListener("click", () => {
   const category = document.getElementById("budgetCategory").value;
   const amount = document.getElementById("budgetAmount").value;
   if (!amount || amount <= 0) {
-  alert("Enter valid budget amount");
-  return;
-}
-  const existing = budgets.find(b => b.category === category.toLowerCase());
+    alert("Enter valid budget amount");
+    return;
+  }
+  const existing = budgets.find((b) => b.category === category.toLowerCase());
   if (existing) {
     existing.limit = Number(amount); // update instead of duplicate
   } else {
     budgets.push({
       category: category.toLowerCase(),
-      limit: Number(amount)
+      limit: Number(amount),
     });
   }
   renderBudgets();
   renderBudgetChart();
   renderGoals();
   document.getElementById("budgetCategory").value = "";
-document.getElementById("budgetAmount").value = "";
-saveData();
-updateDataSummary();
+  document.getElementById("budgetAmount").value = "";
+  saveData();
+  updateDataSummary();
 });
 addGoalBtn.addEventListener("click", () => {
   const name = document.getElementById("goalName").value;
   const amount = document.getElementById("goalAmount").value;
- if (!name.trim() || !amount || amount <= 0) {
+  if (!name.trim() || !amount || amount <= 0) {
     alert("Please enter Goal Name and Amount");
     return;
   }
   goals.push({
     name: name,
-    target: Number(amount)
+    target: Number(amount),
   });
- saveData();
+  saveData();
   document.getElementById("goalName").value = "";
   document.getElementById("goalAmount").value = "";
   renderGoals();
@@ -207,7 +194,7 @@ function renderGoals() {
   goalList.innerHTML = "";
   let income = 0;
   let expense = 0;
-  transactions.forEach(txn => {
+  transactions.forEach((txn) => {
     if (txn.type === "income") {
       income += txn.amount;
     } else {
@@ -217,15 +204,15 @@ function renderGoals() {
   const currentBalance = income - expense;
   goals.forEach((g) => {
     const percent = Math.max(
-    0,
-    Math.min((currentBalance / g.target) * 100,100)
+      0,
+      Math.min((currentBalance / g.target) * 100, 100),
     );
     const remaining = g.target - currentBalance;
     let message = "";
     let color = "#ef4444";
     if (currentBalance >= g.target) {
-     message = "🎉 Goal Completed";
-  color = "#22c55e";
+      message = "🎉 Goal Completed";
+      color = "#22c55e";
     } else {
       message = `❌ More ₹${remaining.toLocaleString()} is needed`;
     }
@@ -234,7 +221,7 @@ function renderGoals() {
 
     div.classList.add("goal-item");
 
-div.innerHTML = `
+    div.innerHTML = `
   <h3>${g.name} - ₹${g.target.toLocaleString()}</h3>
 
   <div class="progress-bar">
@@ -270,7 +257,7 @@ div.innerHTML = `
 }
 function completeGoal(index) {
   goals.splice(index, 1);
- saveData();
+  saveData();
   renderGoals();
   updateDataSummary();
 }
@@ -278,20 +265,16 @@ function renderBudgets() {
   budgetList.innerHTML = "";
   budgets.forEach((b) => {
     let spent = 0;
-    transactions.forEach(txn => {
+    transactions.forEach((txn) => {
       if (
         txn.type === "expense" &&
-       txn.category.trim().toLowerCase() ===
-b.category.trim().toLowerCase()
+        txn.category.trim().toLowerCase() === b.category.trim().toLowerCase()
       ) {
         spent += txn.amount;
       }
     });
     const remaining = b.limit - spent;
-  const percent =
-  b.limit > 0
-  ? Math.min((spent / b.limit) * 100,100)
-  : 0;
+    const percent = b.limit > 0 ? Math.min((spent / b.limit) * 100, 100) : 0;
     const isExceeded = spent > b.limit;
     const div = document.createElement("div");
     div.classList.add("budget-item");
@@ -301,7 +284,7 @@ b.category.trim().toLowerCase()
       </h3>
       <p>
         <span style="
-          color:${isExceeded ? '#ef4444' : '#22c55e'};
+          color:${isExceeded ? "#ef4444" : "#22c55e"};
           font-weight:bold;
         ">
           ₹${spent}
@@ -309,7 +292,7 @@ b.category.trim().toLowerCase()
         / ₹${b.limit}
       </p>
       <p style="
-        color:${isExceeded ? '#ef4444' : '#22c55e'};
+        color:${isExceeded ? "#ef4444" : "#22c55e"};
         font-weight:bold;
       ">
         ${
@@ -323,7 +306,7 @@ b.category.trim().toLowerCase()
           class="progress"
           style="
             width:${percent}%;
-            background:${isExceeded ? '#ef4444' : '#22c55e'};
+            background:${isExceeded ? "#ef4444" : "#22c55e"};
           "
         ></div>
       </div>
@@ -347,13 +330,10 @@ function deleteBudget(index) {
   renderBudgets();
   renderBudgetChart();
   updateDataSummary();
+  updateNotifications();
 }
 function editBudget(index) {
-
-  const newAmount = prompt(
-    "Enter new budget amount",
-    budgets[index].limit
-  );
+  const newAmount = prompt("Enter new budget amount", budgets[index].limit);
 
   if (!newAmount || newAmount <= 0) return;
 
@@ -369,13 +349,10 @@ function deleteGoal(index) {
   saveData();
   renderGoals();
   updateDataSummary();
+  updateNotifications();
 }
 function editGoal(index) {
-
-  const newTarget = prompt(
-    "Enter new target amount",
-    goals[index].target
-  );
+  const newTarget = prompt("Enter new target amount", goals[index].target);
 
   if (!newTarget || newTarget <= 0) return;
 
@@ -387,11 +364,9 @@ function editGoal(index) {
 }
 
 function renderFinancialChart() {
-
   const monthlyData = {};
 
-  transactions.forEach(txn => {
-
+  transactions.forEach((txn) => {
     if (!txn.date) return;
 
     const month = txn.date.slice(0, 7);
@@ -399,7 +374,7 @@ function renderFinancialChart() {
     if (!monthlyData[month]) {
       monthlyData[month] = {
         income: 0,
-        expense: 0
+        expense: 0,
       };
     }
 
@@ -408,7 +383,6 @@ function renderFinancialChart() {
     } else {
       monthlyData[month].expense += txn.amount;
     }
-
   });
 
   const labels = Object.keys(monthlyData).sort();
@@ -417,8 +391,7 @@ function renderFinancialChart() {
   const expenseData = [];
   const balanceData = [];
 
-  labels.forEach(month => {
-
+  labels.forEach((month) => {
     const income = monthlyData[month].income;
     const expense = monthlyData[month].expense;
     const balance = income - expense;
@@ -426,159 +399,146 @@ function renderFinancialChart() {
     incomeData.push(income);
     expenseData.push(expense);
     balanceData.push(balance);
-
   });
   const ctx = document.getElementById("financialChart");
 
-if (financialChart) {
-  financialChart.destroy();
-}
+  if (financialChart) {
+    financialChart.destroy();
+  }
 
-financialChart = new Chart(ctx, {
-  type: "line",
+  financialChart = new Chart(ctx, {
+    type: "line",
 
-  data: {
-    labels: labels,
+    data: {
+      labels: labels,
 
-    datasets: [
-      {
-        label: "Income",
-        data: incomeData,
-        borderColor: "#22c55e",
-        tension: 0.3
-      },
+      datasets: [
+        {
+          label: "Income",
+          data: incomeData,
+          borderColor: "#22c55e",
+          tension: 0.3,
+        },
 
-      {
-        label: "Expense",
-        data: expenseData,
-        borderColor: "#ef4444",
-        tension: 0.3
-      },
+        {
+          label: "Expense",
+          data: expenseData,
+          borderColor: "#ef4444",
+          tension: 0.3,
+        },
 
-      {
-        label: "Balance",
-        data: balanceData,
-        borderColor: "#3b82f6",
-        tension: 0.3
-      }
-    ]
-  },
-
-  options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        labels: {
-          color: "white"
-        }
-      }
+        {
+          label: "Balance",
+          data: balanceData,
+          borderColor: "#3b82f6",
+          tension: 0.3,
+        },
+      ],
     },
 
-    scales: {
-      x: {
-        ticks: {
-          color: "white"
-        }
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: "white",
+          },
+        },
       },
 
-      y: {
-        ticks: {
-          color: "white"
-        }
-      }
-    }
-  }
-});
+      scales: {
+        x: {
+          ticks: {
+            color: "white",
+          },
+        },
 
+        y: {
+          ticks: {
+            color: "white",
+          },
+        },
+      },
+    },
+  });
 }
 function renderBudgetChart() {
-
   const labels = [];
   const budgetData = [];
   const spentData = [];
 
   budgets.forEach((b) => {
-
     let spent = 0;
 
     transactions.forEach((txn) => {
-
       if (
         txn.type === "expense" &&
-        txn.category.trim().toLowerCase() ===
-        b.category.trim().toLowerCase()
+        txn.category.trim().toLowerCase() === b.category.trim().toLowerCase()
       ) {
         spent += txn.amount;
       }
-
     });
 
-    labels.push(
-      b.category.charAt(0).toUpperCase() +
-      b.category.slice(1)
-    );
+    labels.push(b.category.charAt(0).toUpperCase() + b.category.slice(1));
 
     budgetData.push(b.limit);
     spentData.push(spent);
-
   });
   const ctx = document.getElementById("budgetChart");
 
-if (budgetChart) {
-  budgetChart.destroy();
-}
+  if (budgetChart) {
+    budgetChart.destroy();
+  }
 
-budgetChart = new Chart(ctx, {
-  type: "bar",
+  budgetChart = new Chart(ctx, {
+    type: "bar",
 
-  data: {
-    labels: labels,
+    data: {
+      labels: labels,
 
-    datasets: [
-      {
-        label: "Budget",
-        data: budgetData,
-        backgroundColor: "#3b82f6"
-      },
+      datasets: [
+        {
+          label: "Budget",
+          data: budgetData,
+          backgroundColor: "#3b82f6",
+        },
 
-      {
-        label: "Actual Spending",
-        data: spentData,
-        backgroundColor: "#ef4444"
-      }
-    ]
-  },
-
-  options: {
-    responsive: true,
-
-    plugins: {
-      legend: {
-        labels: {
-          color: "white"
-        }
-      }
+        {
+          label: "Actual Spending",
+          data: spentData,
+          backgroundColor: "#ef4444",
+        },
+      ],
     },
 
-    scales: {
-      x: {
-        ticks: {
-          color: "white"
-        }
+    options: {
+      responsive: true,
+
+      plugins: {
+        legend: {
+          labels: {
+            color: "white",
+          },
+        },
       },
 
-      y: {
-        ticks: {
-          color: "white"
-        }
-      }
-    }
-  }
-});
+      scales: {
+        x: {
+          ticks: {
+            color: "white",
+          },
+        },
 
+        y: {
+          ticks: {
+            color: "white",
+          },
+        },
+      },
+    },
+  });
 }
-function updateDataSummary(){
-
+function updateDataSummary() {
   const summary = document.getElementById("dataSummary");
 
   summary.innerHTML = `
@@ -603,10 +563,7 @@ function updateDataSummary(){
   `;
 }
 function clearAllData() {
-
-  const confirmDelete = confirm(
-    "Are you sure you want to delete all data?"
-  );
+  const confirmDelete = confirm("Are you sure you want to delete all data?");
 
   if (!confirmDelete) return;
 
@@ -623,31 +580,25 @@ function clearAllData() {
   renderBudgets();
   renderGoals();
   updateSummary();
-updateFinancialInsights();
+  updateFinancialInsights();
   renderFinancialChart();
   renderBudgetChart();
-
+  updateNotifications();
   updateDataSummary();
 }
-document
-.getElementById("clearDataBtn")
-.addEventListener("click", clearAllData);
+document.getElementById("clearDataBtn").addEventListener("click", clearAllData);
+
+document.getElementById("exportBtn").addEventListener("click", exportData);
 
 document
-.getElementById("exportBtn")
-.addEventListener("click", exportData);
+  .getElementById("searchTransaction")
+  .addEventListener("input", renderTransactions);
 
 document
-.getElementById("searchTransaction")
-.addEventListener("input", renderTransactions);
+  .getElementById("filterType")
+  .addEventListener("change", renderTransactions);
 
-document
-.getElementById("filterType")
-.addEventListener("change", renderTransactions);
-
-document
-.getElementById("importFile")
-.addEventListener("change", importData);
+document.getElementById("importFile").addEventListener("change", importData);
 
 renderTransactions();
 renderRecentTransactions();
@@ -658,19 +609,15 @@ renderFinancialChart();
 renderBudgetChart();
 updateDataSummary();
 function exportData() {
-
   const data = {
     transactions,
     budgets,
-    goals
+    goals,
   };
 
   const jsonData = JSON.stringify(data, null, 2);
 
-  const blob = new Blob(
-    [jsonData],
-    { type: "application/json" }
-  );
+  const blob = new Blob([jsonData], { type: "application/json" });
 
   const url = URL.createObjectURL(blob);
 
@@ -684,88 +631,69 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 function updateTopCategory() {
-
   const categoryTotals = {};
 
-  transactions.forEach(txn => {
-
+  transactions.forEach((txn) => {
     if (txn.type === "expense") {
-
       categoryTotals[txn.category] =
-      (categoryTotals[txn.category] || 0)
-      + txn.amount;
+        (categoryTotals[txn.category] || 0) + txn.amount;
     }
   });
 
   let topCategory = "No Data";
   let maxSpent = 0;
 
-  Object.entries(categoryTotals).forEach(
-    ([category, amount]) => {
+  Object.entries(categoryTotals).forEach(([category, amount]) => {
+    if (amount > maxSpent) {
+      maxSpent = amount;
 
-      if (amount > maxSpent) {
-
-        maxSpent = amount;
-
-       topCategory =
-`${category.charAt(0).toUpperCase() +
-category.slice(1)} - ₹${amount}`;
-      }
+      topCategory = `${
+        category.charAt(0).toUpperCase() + category.slice(1)
+      } - ₹${amount}`;
     }
-  );
+  });
 
-  document.getElementById("topCategory")
-  .textContent = topCategory;
+  document.getElementById("topCategory").textContent = topCategory;
 }
 function renderRecentTransactions() {
-
-  const recentContainer =
-  document.getElementById("recentTransactions");
+  const recentContainer = document.getElementById("recentTransactions");
 
   recentContainer.innerHTML = "";
 
-  const recent =
-  [...transactions].slice(-5).reverse();
+  const recent = [...transactions].slice(-5).reverse();
 
-  recent.forEach(txn => {
-const div = document.createElement("div");
+  recent.forEach((txn) => {
+    const div = document.createElement("div");
 
-div.classList.add("recent-item");
+    div.classList.add("recent-item");
 
-div.innerHTML = `
+    div.innerHTML = `
   <span>
-    ${txn.category.charAt(0).toUpperCase() +
-      txn.category.slice(1)}
+    ${txn.category.charAt(0).toUpperCase() + txn.category.slice(1)}
   </span>
 
   <span>
     ₹${txn.amount}
   </span>
 `;
-  recentContainer.appendChild(div);
+    recentContainer.appendChild(div);
   });
 }
 function importData(event) {
-
   const file = event.target.files[0];
 
   if (!file) return;
 
   const reader = new FileReader();
 
-  reader.onload = function(e) {
+  reader.onload = function (e) {
+    const data = JSON.parse(e.target.result);
 
-    const data =
-      JSON.parse(e.target.result);
+    transactions = data.transactions || [];
 
-    transactions =
-      data.transactions || [];
+    budgets = data.budgets || [];
 
-    budgets =
-      data.budgets || [];
-
-    goals =
-      data.goals || [];
+    goals = data.goals || [];
 
     saveData();
 
@@ -785,60 +713,41 @@ function importData(event) {
   reader.readAsText(file);
 }
 function updateFinancialInsights() {
-
-  const insights =
-  document.getElementById("financialInsights");
+  const insights = document.getElementById("financialInsights");
 
   let income = 0;
   let expense = 0;
 
   const categoryTotals = {};
 
-  transactions.forEach(txn => {
-
+  transactions.forEach((txn) => {
     if (txn.type === "income") {
-
       income += txn.amount;
-
     } else {
-
       expense += txn.amount;
 
       categoryTotals[txn.category] =
-      (categoryTotals[txn.category] || 0)
-      + txn.amount;
+        (categoryTotals[txn.category] || 0) + txn.amount;
     }
-
   });
 
   let topCategory = "No Data";
   let maxAmount = 0;
 
-  Object.entries(categoryTotals).forEach(
-    ([category, amount]) => {
-
-      if (amount > maxAmount) {
-
-        maxAmount = amount;
-        topCategory = category;
-      }
+  Object.entries(categoryTotals).forEach(([category, amount]) => {
+    if (amount > maxAmount) {
+      maxAmount = amount;
+      topCategory = category;
     }
-  );
+  });
 
   if (topCategory !== "No Data") {
-
-    topCategory =
-      topCategory.charAt(0).toUpperCase() +
-      topCategory.slice(1);
-
+    topCategory = topCategory.charAt(0).toUpperCase() + topCategory.slice(1);
   }
 
   const savings = income - expense;
 
-  const savingsRate =
-    income > 0
-      ? ((savings / income) * 100).toFixed(1)
-      : 0;
+  const savingsRate = income > 0 ? ((savings / income) * 100).toFixed(1) : 0;
 
   insights.innerHTML = `
     <p>🏆 Highest Expense Category: ${topCategory}</p>
@@ -851,47 +760,104 @@ function updateFinancialInsights() {
   `;
 }
 const themeToggle = document.getElementById("themeToggle");
-if(localStorage.getItem("theme") === "light"){
-    document.body.classList.add("light-mode");
-    themeToggle.textContent = "☀️";
+if (localStorage.getItem("theme") === "light") {
+  document.body.classList.add("light-mode");
+  themeToggle.textContent = "☀️";
 }
 themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
 
-    document.body.classList.toggle("light-mode");
-
-    if(document.body.classList.contains("light-mode")){
-        themeToggle.textContent = "☀️";
-        localStorage.setItem("theme","light");
-    }
-    else{
-        themeToggle.textContent = "🌙";
-        localStorage.setItem("theme","dark");
-    }
-
+  if (document.body.classList.contains("light-mode")) {
+    themeToggle.textContent = "☀️";
+    localStorage.setItem("theme", "light");
+  } else {
+    themeToggle.textContent = "🌙";
+    localStorage.setItem("theme", "dark");
+  }
 });
 const launchAIBtn = document.getElementById("launchAIBtn");
 
 if (launchAIBtn) {
   launchAIBtn.addEventListener("click", () => {
-
     alert(
-      "🤖 AI Analytics is currently under development and will be available in a future release."
+      "🤖 AI Analytics is currently under development and will be available in a future release.",
     );
-
   });
 }
 const accountBtn = document.getElementById("accountBtn");
 
 accountBtn.addEventListener("click", () => {
-
-    alert(
-        "👤 Account Management is currently under development and will be available in a future release."
-    );
-
+  alert(
+    "👤 Account Management is currently under development and will be available in a future release.",
+  );
 });
+function updateNotifications() {
+  const notificationBox = document.getElementById("notifications");
+
+  let notifications = [];
+
+  // Budget Notifications
+  budgets.forEach((budget) => {
+    let spent = 0;
+
+    transactions.forEach((txn) => {
+      if (
+        txn.type === "expense" &&
+        txn.category.toLowerCase() === budget.category.toLowerCase()
+      ) {
+        spent += txn.amount;
+      }
+    });
+
+    if (spent > budget.limit) {
+      notifications.push(
+        `⚠️ ${budget.category} budget exceeded by ₹${spent - budget.limit}`,
+      );
+    }
+  });
+
+  // Goal Notifications
+
+  let income = 0;
+  let expense = 0;
+
+  transactions.forEach((txn) => {
+    if (txn.type === "income") {
+      income += txn.amount;
+    } else {
+      expense += txn.amount;
+    }
+  });
+
+  const balance = income - expense;
+
+  goals.forEach((goal) => {
+    const percent = (balance / goal.target) * 100;
+
+    if (percent >= 100) {
+      notifications.push(`🎉 Goal "${goal.name}" completed`);
+    } else if (percent >= 80) {
+      notifications.push(
+        `🎯 Goal "${goal.name}" is ${percent.toFixed(0)}% complete`,
+      );
+    }
+  });
+
+  if (notifications.length === 0) {
+    notificationBox.innerHTML = "<p>✅ No Notifications</p>";
+
+    return;
+  }
+
+  notificationBox.innerHTML = notifications
+    .map((msg) => `<p>${msg}</p>`)
+    .join("");
+}
+
 renderTransactions();
 renderRecentTransactions();
 updateSummary();
 updateTopCategory();
 renderBudgets();
 updateFinancialInsights();
+updateNotifications();
