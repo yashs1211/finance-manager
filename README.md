@@ -1,4 +1,6 @@
 # FinTrack Pro – Personal Finance & Expense Management System
+🚀 Try the application here:
+🔗 Live Demo: https://fintrackpro-budget-expense-tracker.netlify.app/
 
 ## About the Project
 
