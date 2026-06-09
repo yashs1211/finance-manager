@@ -97,18 +97,22 @@ function renderTransactions() {
 
     return matchesSearch && matchesType;
   });
+  if (filteredTransactions.length === 0) {
+    transactionList.innerHTML =
+      "<p style='color:white;padding:20px;'>No Transactions Available</p>";
+    return;
+  }
 
   filteredTransactions.forEach((txn) => {
     const div = document.createElement("div");
-
     div.classList.add("txn-item");
-
     div.innerHTML = `
-      <p>
+     <p>
 ${txn.category.charAt(0).toUpperCase() + txn.category.slice(1)}
 - ₹${txn.amount}
+<br>
+<small>${txn.date}</small>
 </p>
-
       <button onclick="deleteTransaction(${transactions.indexOf(txn)})">
         ❌
       </button>
@@ -624,7 +628,7 @@ function exportData() {
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = "cookiefinance-data.json";
+  link.download = "fintrackpro-data.json";
 
   link.click();
 
@@ -666,15 +670,17 @@ function renderRecentTransactions() {
     const div = document.createElement("div");
 
     div.classList.add("recent-item");
-
     div.innerHTML = `
-  <span>
-    ${txn.category.charAt(0).toUpperCase() + txn.category.slice(1)}
-  </span>
-
-  <span>
-    ₹${txn.amount}
-  </span>
+<div>
+<span>
+${txn.category.charAt(0).toUpperCase() + txn.category.slice(1)}
+</span>
+<br>
+<small>${txn.date}</small>
+</div>
+<span>
+₹${txn.amount}
+</span>
 `;
     recentContainer.appendChild(div);
   });
@@ -696,16 +702,6 @@ function importData(event) {
     goals = data.goals || [];
 
     saveData();
-
-    renderTransactions();
-    renderRecentTransactions();
-    updateSummary();
-    updateTopCategory();
-    renderBudgets();
-    renderGoals();
-    renderFinancialChart();
-    renderBudgetChart();
-    updateDataSummary();
 
     alert("Data Imported Successfully");
   };
@@ -788,7 +784,7 @@ const accountBtn = document.getElementById("accountBtn");
 
 accountBtn.addEventListener("click", () => {
   alert(
-    "👤 Account Management is currently under development and will be available in a future release.",
+    "👤 Account Management is currently under development and will be available in a future release .",
   );
 });
 function updateNotifications() {
